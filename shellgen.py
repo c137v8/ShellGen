@@ -3,11 +3,11 @@ import sys
 import os
 import subprocess
 import contextlib
-import shlex
 from llama_cpp import Llama
 from colorama import Fore, Style, init
 
 init(autoreset=True)
+
 
 @contextlib.contextmanager
 def suppress_output():
@@ -30,22 +30,27 @@ def clean_command(cmd):
 
 
 def main():
+    # Check for non-interactive mode (used by Fish)
+    non_interactive = bool(os.getenv("NON_INTERACTIVE")) or "--no-confirm" in sys.argv
+
     # Input handling
     if not sys.stdin.isatty():
         user_input = sys.stdin.read().strip()
     elif len(sys.argv) > 1:
-        user_input = " ".join(sys.argv[1:])
+        # Remove the --no-confirm flag if present
+        args = [a for a in sys.argv[1:] if a != "--no-confirm"]
+        user_input = " ".join(args)
     else:
         print(f"{Fore.YELLOW}Usage:{Style.RESET_ALL} {sys.argv[0]} <text to convert>")
         print(f"   or: echo '<text>' | python3 {os.path.basename(sys.argv[0])}")
         sys.exit(1)
 
     # Model path
-    model_path = os.path.expanduser("./models/Llama-3.2-3B-Instruct-IQ3_M.gguf")
+    model_path = os.path.expanduser("~/.aimodels/Llama-3.2-3B-Instruct-IQ3_M.gguf")
 
     if not os.path.exists(model_path):
         print(f"{Fore.RED}Model not found at:{Style.RESET_ALL} {model_path}")
-        print(f"{Fore.CYAN}Please download and place the model in ./models before continuing.{Style.RESET_ALL}")
+        print(f"{Fore.CYAN}Please download and place the model in ~/.aimodels before continuing.{Style.RESET_ALL}")
         sys.exit(1)
 
     # Load model quietly
@@ -73,6 +78,12 @@ def main():
     raw_command = output["choices"][0]["message"]["content"].strip().splitlines()[0]
     command = clean_command(raw_command)
 
+    # Non-interactive (for Fish or scripts)
+    if non_interactive:
+        print(command, end="")
+        return
+
+    # Interactive mode (normal terminal usage)
     print(f"\n{Fore.CYAN}Input:{Style.RESET_ALL} {user_input}")
     print(f"{Fore.GREEN}Command:{Style.RESET_ALL} {command}\n")
 
