@@ -46,11 +46,11 @@ def main():
         sys.exit(1)
 
     # Model path
-    model_path = os.path.expanduser("~/.aimodels/Llama-3.2-3B-Instruct-IQ3_M.gguf")
+    model_path = os.path.expanduser("~/.shellgen/models/Llama-3.2-3B-Instruct-IQ3_M.gguf")
 
     if not os.path.exists(model_path):
         print(f"{Fore.RED}Model not found at:{Style.RESET_ALL} {model_path}")
-        print(f"{Fore.CYAN}Please download and place the model in ~/.aimodels before continuing.{Style.RESET_ALL}")
+        print(f"{Fore.CYAN}Please download and place the model in ~/.shellgen/models/Llama-3.2-3B-Instruct-IQ3_M.gguf before continuing.{Style.RESET_ALL}")
         sys.exit(1)
 
     # Load model quietly
