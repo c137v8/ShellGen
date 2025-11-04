@@ -1,0 +1,12 @@
+[project]
+name = "shellgen"
+version = "1.0.0"
+description = "AI that turns plain English into shell commands"
+authors = [{ name = "c137v8", email = "c137v8@gmail.com" }]
+license = "MIT"
+requires-python = ">=3.8"
+dependencies = ["colorama", "llama-cpp-python"]
+
+[project.scripts]
+shellgen = "shellgen.shellgen:main"
+shellgen-setup = "shellgen.install:main"
