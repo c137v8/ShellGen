@@ -24,7 +24,7 @@ It helps you write shell commands faster, safer, and more intuitively.
 
 ---
 
-## 🧰 Installation
+## 🧰 Installation (Not yet published. Skip to install from source)
 
 ### From PyPI (recommended)
 Once published, you’ll be able to install ShellGen via pip:
