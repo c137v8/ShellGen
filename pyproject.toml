@@ -8,5 +8,5 @@ requires-python = ">=3.8"
 dependencies = ["colorama", "llama-cpp-python"]
 
 [project.scripts]
-shellgen = "shellgen.shellgen:main"
+shellgen = "shellgen.src.shellgen:main"
 shellgen-setup = "shellgen.install:main"
