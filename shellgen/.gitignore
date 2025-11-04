@@ -210,3 +210,6 @@ bin/
 lib/
 lib64/
 bin/
+lib64/
+lib64@/
+lib64@
