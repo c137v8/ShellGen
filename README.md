@@ -37,7 +37,7 @@ pip install shellgen
 If you’re developing or testing locally:
 
 ```bash
-git clone https://github.com/yourusername/ShellGen.git
+git clone https://github.com/c137v8/ShellGen.git
 cd ShellGen
 pip install -e .
 ```
@@ -126,10 +126,9 @@ Now just type your natural language request and press **Ctrl+G** to turn it into
 By default, ShellGen looks for your model at:
 
 ```
-~/.aimodels/Llama-3.2-3B-Instruct-IQ3_M.gguf
+~/.config/shellgen/models/Llama-3.2-3B-Instruct-IQ3_M.gguf
 ```
 
-You can change this in your config or environment variable (coming soon).
 
 You can download models from:
 - [TheBloke’s Hugging Face models](https://huggingface.co/TheBloke)
@@ -160,8 +159,8 @@ python -m build
 
 ## 📜 License
 
-MIT License © 2025 [Your Name]  
-Feel free to fork, contribute, and enhance!
+MIT License © 2025 Ibrahim  
+Feel free to contribute and enhance!
 
 ---
 
@@ -177,12 +176,8 @@ Feel free to fork, contribute, and enhance!
 
 ## 🧠 Future Roadmap
 
-- [ ] Bash/Zsh keybinding helpers  
-- [ ] Custom model path configuration  
-- [ ] Inline suggestions  
-- [ ] Risk scoring (for destructive commands)  
-- [ ] Streamed LLM responses  
+- [ ] Fine tune custom models so its faster and better ;)
 
 ---
 
-> 💬 *ShellGen helps you command your terminal the way you think — not the way the shell does.*
+> 💬 *ShellGen*
