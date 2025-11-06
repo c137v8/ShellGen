@@ -7,7 +7,7 @@ import configparser
 from llama_cpp import Llama
 from colorama import Fore, Style, init
 from gpt4all import GPT4All
-import setup
+from . import setup
 
 init(autoreset=True)
 
