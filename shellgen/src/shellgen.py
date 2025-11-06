@@ -3,15 +3,51 @@ import sys
 import os
 import subprocess
 import contextlib
+import configparser
 from llama_cpp import Llama
 from colorama import Fore, Style, init
+from gpt4all import GPT4All
+import setup
 
 init(autoreset=True)
 
+CONFIG_DIR = os.path.expanduser("~/.config/shellgen/")
+CONFIG_FILE = os.path.join(CONFIG_DIR, "config.ini")
+
+
+# -----------------------
+#  CONFIG / MODEL HANDLING
+# -----------------------
+def load_model_name():
+    """Load model name from config.ini. If missing or malformed, trigger setup.py."""
+
+    # If config file doesn't exist -> run setup
+    if not os.path.exists(CONFIG_FILE):
+        print(f"{Fore.RED}ShellGen not configured. Launching setup...{Style.RESET_ALL}")
+        setup.run_setup()
+
+    config = configparser.ConfigParser()
+    config.read(CONFIG_FILE)
+
+    # If section OR key is missing -> run setup again
+    if "shellgen" not in config or "model" not in config["shellgen"]:
+        print(f"{Fore.RED}Invalid or corrupt config file. Relaunching setup...{Style.RESET_ALL}")
+        os.system(f"{sys.executable} setup.py")
+        config.read(CONFIG_FILE)
+
+    return config["shellgen"]["model"]
+
+
+MODEL_NAME = load_model_name()  # <-- ✅ assign the global model name
+
+
+# -----------------------
+#  UTILS
+# -----------------------
 
 @contextlib.contextmanager
 def suppress_output():
-    """Temporarily suppress stdout and stderr."""
+    """Temporarily hide noisy llama-cpp logs."""
     with open(os.devnull, 'w') as devnull:
         old_stdout, old_stderr = sys.stdout, sys.stderr
         try:
@@ -22,48 +58,55 @@ def suppress_output():
 
 
 def clean_command(cmd):
-    """Remove wrapping quotes or backticks, trim whitespace."""
+    """Remove quotes or backticks from model output."""
     cmd = cmd.strip()
     if cmd.startswith(("`", '"', "'")) and cmd.endswith(("`", '"', "'")):
         cmd = cmd[1:-1].strip()
     return cmd
 
 
-def main():
-    # Check for non-interactive mode (used by Fish)
-    non_interactive = bool(os.getenv("NON_INTERACTIVE")) or "--no-confirm" in sys.argv
+def download_model(model_path):
+    """Download selected model from GPT4All."""
+    print(f"{Fore.YELLOW}Downloading model {MODEL_NAME} ...{Style.RESET_ALL}")
+    os.makedirs(os.path.dirname(model_path), exist_ok=True)
 
-    # Input handling
+    # GPT4All downloads into directory path, not full file path
+    GPT4All(MODEL_NAME, model_path=os.path.dirname(model_path))
+
+    print(f"{Fore.GREEN}✅ Model downloaded:{Style.RESET_ALL} {model_path}")
+
+
+# -----------------------
+#  MAIN SHELLGEN LOGIC
+# -----------------------
+
+def main():
+    # Get user input (supports pipe and arguments)
     if not sys.stdin.isatty():
         user_input = sys.stdin.read().strip()
     elif len(sys.argv) > 1:
-        # Remove the --no-confirm flag if present
-        args = [a for a in sys.argv[1:] if a != "--no-confirm"]
-        user_input = " ".join(args)
+        user_input = " ".join([a for a in sys.argv[1:] if a != "--no-confirm"])
     else:
-        print(f"{Fore.YELLOW}Usage:{Style.RESET_ALL} {sys.argv[0]} <text to convert>")
-        print(f"   or: echo '<text>' | python3 {os.path.basename(sys.argv[0])}")
+        print(f"{Fore.YELLOW}Usage:{Style.RESET_ALL} {sys.argv[0]} <text>")
+        print(f"   or: echo 'text' | {sys.argv[0]}")
         sys.exit(1)
 
-    # Model path
-    model_path = os.path.expanduser("~/.config/shellgen/models/Llama-3.2-3B-Instruct-IQ3_M.gguf")
+    model_path = os.path.expanduser(f"{CONFIG_DIR}/models/{MODEL_NAME}")
 
     if not os.path.exists(model_path):
-        print(f"{Fore.RED}Model not found at:{Style.RESET_ALL} {model_path}")
-        print(f"{Fore.CYAN}Please download and place the model in ~/.shellgen/models/Llama-3.2-3B-Instruct-IQ3_M.gguf before continuing.{Style.RESET_ALL}")
-        sys.exit(1)
+        print(f"{Fore.RED}Model not found:{Style.RESET_ALL} {model_path}")
+        download_model(model_path)
 
-    # Load model quietly
+    # Load LLaMA model silently
     with suppress_output():
         llm = Llama(model_path=model_path, n_ctx=4096, n_threads=4)
 
-    # Prompt definition
     system_prompt = (
-        "You are an AI that converts natural language into valid Linux shell commands. "
-        "Respond ONLY with the command, no explanations, no extra text."
+        "You convert natural language into valid Linux shell commands. "
+        "Respond ONLY with the command, nothing else."
     )
 
-    # Query model
+    # Ask the model
     with suppress_output():
         output = llm.create_chat_completion(
             messages=[
@@ -74,32 +117,21 @@ def main():
             temperature=0.0,
         )
 
-    # Clean the AI output
-    raw_command = output["choices"][0]["message"]["content"].strip().splitlines()[0]
-    command = clean_command(raw_command)
+    command = clean_command(output["choices"][0]["message"]["content"].strip().splitlines()[0])
 
-    # Non-interactive (for Fish or scripts)
-    if non_interactive:
-        print(command, end="")
-        return
-
-    # Interactive mode (normal terminal usage)
     print(f"\n{Fore.CYAN}Input:{Style.RESET_ALL} {user_input}")
     print(f"{Fore.GREEN}Command:{Style.RESET_ALL} {command}\n")
 
-    # Basic safety detection
+    # Safety prompt for destructive commands
     risky = any(x in command.split() for x in ("rm", "mv", "chmod", "chown", "rmdir", "dd", "mkfs"))
     if risky:
-        print(f"{Fore.RED}⚠️  Warning:{Style.RESET_ALL} This command may alter or delete files.\n")
+        print(f"{Fore.RED}⚠️  WARNING: command modifies system files.{Style.RESET_ALL}\n")
 
-    confirm = input(f"{Fore.YELLOW}Run this command? [Y/n] {Style.RESET_ALL}").strip().lower()
+    confirm = input(f"{Fore.YELLOW}Run this command? [Y/n]{Style.RESET_ALL} ").strip().lower()
 
     if confirm in ("", "y", "yes"):
-        print(f"\n{Fore.GREEN}Executing...{Style.RESET_ALL}\n")
-        try:
-            subprocess.run(command, shell=True, check=True)
-        except subprocess.CalledProcessError as e:
-            print(f"{Fore.RED}Command failed with exit code {e.returncode}{Style.RESET_ALL}")
+        print(f"{Fore.GREEN}Executing...{Style.RESET_ALL}\n")
+        subprocess.run(command, shell=True)
     else:
         print(f"{Fore.BLUE}Cancelled.{Style.RESET_ALL}")
 
