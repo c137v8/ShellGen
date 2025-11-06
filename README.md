@@ -109,7 +109,7 @@ When run for the first time, ShellGen creates a configuration file at ~/.config/
 
 Downloaded models are stored at:
 ```
-~/.config/shellgen/models/Llama-3.2-3B-Instruct-IQ3_M.gguf
+~/.config/shellgen/models/
 ```
 
 
