@@ -24,7 +24,7 @@ It helps you write shell commands faster, safer, and more intuitively.
 
 ---
 
-## 🧰 Installation (Not yet published. Skip to install from source)
+## 🧰 Installation
 
 ### From PyPI (recommended)
 Once published, you’ll be able to install ShellGen via pip:
@@ -75,7 +75,7 @@ echo "show disk usage" | shellgen
 
 ### 🔹 Auto-confirm execution
 
-Add the `--no-confirm` flag to skip the confirmation prompt:
+Add the `--no-confirm` flag to skip the confirmation prompt(For use with terminal key bindings):
 
 ```bash
 shellgen "show current directory" --no-confirm
@@ -83,54 +83,37 @@ shellgen "show current directory" --no-confirm
 
 ---
 
-## 🐟 Fish Shell Integration
+## Shell Integration
 
 You can bind ShellGen to a keyboard shortcut (e.g., `Ctrl+G`) to generate commands inline.
 
-Example function (`~/.config/fish/functions/ai_command.fish`):
+To bind keys run the following command:
 
+For bash/zsh:
+```bash
+source ./scripts/ai_command.sh
+```
+
+For fish:
 ```fish
-function ai_command
-    set input (commandline)
-    set tmpfile (mktemp)
-    echo "[AI] Generating command..." >&2
-
-    bash -c "echo "$input" | shellgen --no-confirm > '$tmpfile'" &
-    set pid $last_pid
-
-    # Spinner animation
-    set spin_chars "/ - \\ |"
-    while kill -0 $pid 2>/dev/null
-        for c in $spin_chars
-            printf "\r[AI] Generating command... %s" $c >&2
-            sleep 0.1
-        end
-    end
-
-    set output (cat $tmpfile)
-    rm $tmpfile
-    printf "\r\033[K" >&2
-    commandline -r $output
-    commandline -f repaint
-end
-
-bind \cg ai_command
+source ./script/ai_command.fish
 ```
 
 Now just type your natural language request and press **Ctrl+G** to turn it into a shell command ✨
 
 ---
 
-## 🧩 Model Configuration
+## 🧩 Model setup
 
-By default, ShellGen looks for your model at:
+When run for the first time, ShellGen creates a configuration file at ~/.config/shellgen
 
+Downloaded models are stored at:
 ```
 ~/.config/shellgen/models/Llama-3.2-3B-Instruct-IQ3_M.gguf
 ```
 
 
-You can download models from:
+Alternatively, you can download models from:
 - [TheBloke’s Hugging Face models](https://huggingface.co/TheBloke)
 - [llama.cpp model zoo](https://huggingface.co/models?library=llama.cpp)
 
