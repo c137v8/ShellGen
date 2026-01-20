@@ -1,12 +1,12 @@
+<div align = center>
 # 🐚 ShellGen
 
-<div align = center>
 
 <img src="https://raw.githubusercontent.com/c137v8/ShellGen/refs/heads/main/SHELLGEN.png">
 
 **ShellGen** is an AI-powered command-line assistant that converts natural language into valid shell commands — powered by a **local LLM** (no API keys, no cloud).  
 It helps you write shell commands faster, safer, and more intuitively.
-
+</div>
 ---
 
 ## ✨ Features
