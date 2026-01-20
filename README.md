@@ -1,4 +1,3 @@
-# 🐚 ShellGen
 <div align = center>
 
 
