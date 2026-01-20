@@ -6,7 +6,7 @@ It helps you write shell commands faster, safer, and more intuitively.
 ---
 <div align = center>
 
-<img src="[https://raw.githubusercontent.com/hyprwm/Hyprland/main/assets/header.svg" width="750" height="300" alt="banner](https://raw.githubusercontent.com/MIRFANY/ShellGen/refs/heads/main/SHELLGEN.png)">
+<img src="https://raw.githubusercontent.com/c137v8/ShellGen/refs/heads/main/SHELLGEN.png">
 
 
 ## ✨ Features
