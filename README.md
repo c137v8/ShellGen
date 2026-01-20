@@ -7,26 +7,26 @@
 
 </div>
 
-## ✨ Features
+##  Features
 
-- 🧠 **Natural Language → Command**  
+-  **Natural Language → Command**  
   Type what you want to do, and ShellGen generates the right command.
 
-- 🔒 **Private and Offline**  
+-  **Private and Offline**  
   Runs entirely on your machine using [llama.cpp](https://github.com/ggerganov/llama.cpp).
 
-- ⚙️ **Shell Integration**  
+-  **Shell Integration**  
   Works directly in Fish, Bash, or Zsh (customizable key bindings).
 
-- 🧩 **Command Preview and Confirmation**  
+-  **Command Preview and Confirmation**  
   Lets you see what will run — and warns you about risky commands.
 
-- 🚀 **Local Model Support**  
+-  **Local Model Support**  
   Supports quantized `.gguf` Llama models for fast, low-RAM inference.
 
 ---
 
-## 🧰 Installation
+##  Installation
 
 ### From PyPI (recommended)
 Once published, you’ll be able to install ShellGen via pip:
@@ -48,9 +48,9 @@ This installs `shellgen` as a terminal command in your environment.
 
 ---
 
-## ⚙️ Usage
+##  Usage
 
-### 🔹 Basic usage
+###  Basic usage
 
 You can run ShellGen directly from the terminal:
 
@@ -105,7 +105,7 @@ Now just type your natural language request and press **Ctrl+G** to turn it into
 
 ---
 
-## 🧩 Model setup
+##  Model setup
 
 When run for the first time, ShellGen creates a configuration file at ~/.config/shellgen
 
@@ -121,7 +121,7 @@ Alternatively, you can download models from:
 
 ---
 
-## 🛠️ Development
+##  Development
 
 ### Setup environment
 ```bash
@@ -142,14 +142,14 @@ python -m build
 
 ---
 
-## 📜 License
+##  License
 
 MIT License © 2025 Ibrahim  
 Feel free to contribute and enhance!
 
 ---
 
-## 💡 Example Ideas
+##  Example Ideas
 
 | Input | Output |
 |-------|---------|
@@ -159,7 +159,7 @@ Feel free to contribute and enhance!
 
 ---
 
-## 🧠 Future Roadmap
+##  Future Roadmap
 
 - [ ] Fine tune custom models so its faster and better ;)
 
