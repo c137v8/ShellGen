@@ -9,20 +9,9 @@
 
 ##  Features
 
--  **Natural Language → Command**  
-  Type what you want to do, and ShellGen generates the right command.
-
--  **Private and Offline**  
-  Runs entirely on your machine using [llama.cpp](https://github.com/ggerganov/llama.cpp).
-
--  **Shell Integration**  
-  Works directly in Fish, Bash, or Zsh (customizable key bindings).
-
--  **Command Preview and Confirmation**  
-  Lets you see what will run — and warns you about risky commands.
-
--  **Local Model Support**  
-  Supports quantized `.gguf` Llama models for fast, low-RAM inference.
+- Type what you want to do, and ShellGen generates the right command.
+- Runs entirely on your machine using [llama.cpp](https://github.com/ggerganov/llama.cpp).
+- Works best with key binding(See Scripts).
 
 ---
 
@@ -67,24 +56,6 @@ Run this command? [Y/n]
 
 ---
 
-### 🔹 Using stdin
-
-```bash
-echo "show disk usage" | shellgen
-```
-
----
-
-### 🔹 Auto-confirm execution
-
-Add the `--no-confirm` flag to skip the confirmation prompt(For use with terminal key bindings):
-
-```bash
-shellgen "show current directory" --no-confirm
-```
-
----
-
 ## Shell Integration
 
 You can bind ShellGen to a keyboard shortcut (e.g., `Ctrl+G`) to generate commands inline.
@@ -101,25 +72,17 @@ For fish:
 source ./script/ai_command.fish
 ```
 
-Now just type your natural language request and press **Ctrl+G** to turn it into a shell command ✨
+Now just type your natural language request and press **Ctrl+G** to turn it into a shell command 
 
 ---
 
 ##  Model setup
 
 When run for the first time, ShellGen creates a configuration file at ~/.config/shellgen
-
 Downloaded models are stored at:
 ```
 ~/.config/shellgen/models/
 ```
-
-
-Alternatively, you can download models from:
-- [TheBloke’s Hugging Face models](https://huggingface.co/TheBloke)
-- [llama.cpp model zoo](https://huggingface.co/models?library=llama.cpp)
-
----
 
 ##  Development
 
@@ -142,10 +105,8 @@ python -m build
 
 ---
 
-##  License
-
-MIT License © 2025 Ibrahim  
-Feel free to contribute and enhance!
+##  Autur 
+Ibrahim Umran Parray 
 
 ---
 
@@ -158,11 +119,3 @@ Feel free to contribute and enhance!
 | "start a simple HTTP server" | `python3 -m http.server` |
 
 ---
-
-##  Future Roadmap
-
-- [ ] Fine tune custom models so its faster and better ;)
-
----
-
-> 💬 *ShellGen*
