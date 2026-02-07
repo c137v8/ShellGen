@@ -11,7 +11,7 @@
 
 - Type what you want to do, and ShellGen generates the right command.
 - Runs entirely on your machine using [llama.cpp](https://github.com/ggerganov/llama.cpp).
-- Works best with key binding(See Scripts).
+- Press Ctrl+G in terminal to autofill.
 
 ---
 
