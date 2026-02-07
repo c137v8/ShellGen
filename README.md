@@ -59,9 +59,7 @@ Run this command? [Y/n]
 ## Shell Integration
 
 You can bind ShellGen to a keyboard shortcut (e.g., `Ctrl+G`) to generate commands inline.
-
 To bind keys run the following command:
-
 For bash/zsh:
 ```bash
 source ./scripts/ai_command.sh
@@ -76,13 +74,7 @@ Now just type your natural language request and press **Ctrl+G** to turn it into
 
 ---
 
-##  Model setup
 
-When run for the first time, ShellGen creates a configuration file at ~/.config/shellgen
-Downloaded models are stored at:
-```
-~/.config/shellgen/models/
-```
 
 ##  Development
 
